@@ -12,11 +12,11 @@ resource "google_compute_firewall" "vpc_firewall_allow" {
   count = length(var.allow_rules)
   name = "${var.name}-${replace(var.allow_rules[count.index].name, "_", "-")}-allow"
   network = google_compute_network.vpc_network.name
-  source_tags = var.allow_rules[count.index].name == "source_tags" ? var.allow_rules[count.index].list : []
-  source_ranges = var.allow_rules[count.index].name == "source_ranges" ? var.allow_rules[count.index].list : []
-  source_service_accounts = var.allow_rules[count.index].name == "source_service_accounts" ? var.allow_rules[count.index].list : []
-  target_tags = var.allow_rules[count.index].name == "target_tags" ? var.allow_rules[count.index].list : []
-  target_service_accounts = var.allow_rules[count.index].name == "target_service_accounts" ? var.allow_rules[count.index].list : []
+  source_tags = var.allow_rules[count.index].name == "source_tags" ? var.allow_rules[count.index].list : null
+  source_ranges = var.allow_rules[count.index].name == "source_ranges" ? var.allow_rules[count.index].list : null
+  source_service_accounts = var.allow_rules[count.index].name == "source_service_accounts" ? var.allow_rules[count.index].list : null
+  target_tags = var.allow_rules[count.index].name == "target_tags" ? var.allow_rules[count.index].list : null
+  target_service_accounts = var.allow_rules[count.index].name == "target_service_accounts" ? var.allow_rules[count.index].list : null
   dynamic "allow" {
     for_each = [for rule in var.allow_rules[count.index].rules: {
       protocol = lookup(rule, "protocol", null)
@@ -33,11 +33,11 @@ resource "google_compute_firewall" "vpc_firewall_deny" {
   count = length(var.deny_rules)
   name = "${var.name}-${replace(var.deny_rules[count.index].name, "_", "-")}-deny"
   network = google_compute_network.vpc_network.name
-  source_tags = var.deny_rules[count.index].name == "source_tags" ? var.deny_rules[count.index].list : []
-  source_ranges = var.deny_rules[count.index].name == "source_ranges" ? var.deny_rules[count.index].list : []
-  source_service_accounts = var.deny_rules[count.index].name == "source_service_accounts" ? var.deny_rules[count.index].list : []
-  target_tags = var.deny_rules[count.index].name == "target_tags" ? var.deny_rules[count.index].list : []
-  target_service_accounts = var.deny_rules[count.index].name == "target_service_accounts" ? var.deny_rules[count.index].list : []
+  source_tags = var.deny_rules[count.index].name == "source_tags" ? var.deny_rules[count.index].list : null
+  source_ranges = var.deny_rules[count.index].name == "source_ranges" ? var.deny_rules[count.index].list : null
+  source_service_accounts = var.deny_rules[count.index].name == "source_service_accounts" ? var.deny_rules[count.index].list : null
+  target_tags = var.deny_rules[count.index].name == "target_tags" ? var.deny_rules[count.index].list : null
+  target_service_accounts = var.deny_rules[count.index].name == "target_service_accounts" ? var.deny_rules[count.index].list : null
   dynamic "deny" {
     for_each = [for rule in var.deny_rules[count.index].rules: {
       protocol = lookup(rule, "protocol", null)
